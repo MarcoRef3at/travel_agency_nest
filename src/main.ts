@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   initModels(db.sequelize)
-  await db.sequelize.sync()
+  await db.sequelize.sync({ force: true })
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 }

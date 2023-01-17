@@ -11,9 +11,11 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import type { Guest } from './Guest'
 import type { Transaction } from './Transaction'
+import type { TraveAgency } from './TraveAgency'
 
-type SaleAssociations = 'transaction'
+type SaleAssociations = 'transaction' | 'traveAgency' | 'guest'
 
 export class Sale extends Model<
   InferAttributes<Sale, {omit: SaleAssociations}>,
@@ -31,8 +33,22 @@ export class Sale extends Model<
   declare setTransaction: BelongsToSetAssociationMixin<Transaction, number>
   declare createTransaction: BelongsToCreateAssociationMixin<Transaction>
   
+  // Sale belongsTo TraveAgency
+  declare traveAgency?: NonAttribute<TraveAgency>
+  declare getTraveAgency: BelongsToGetAssociationMixin<TraveAgency>
+  declare setTraveAgency: BelongsToSetAssociationMixin<TraveAgency, number>
+  declare createTraveAgency: BelongsToCreateAssociationMixin<TraveAgency>
+  
+  // Sale belongsTo Guest
+  declare guest?: NonAttribute<Guest>
+  declare getGuest: BelongsToGetAssociationMixin<Guest>
+  declare setGuest: BelongsToSetAssociationMixin<Guest, number>
+  declare createGuest: BelongsToCreateAssociationMixin<Guest>
+  
   declare static associations: {
-    transaction: Association<Sale, Transaction>
+    transaction: Association<Sale, Transaction>,
+    traveAgency: Association<Sale, TraveAgency>,
+    guest: Association<Sale, Guest>
   }
 
   static initModel(sequelize: Sequelize): typeof Sale {

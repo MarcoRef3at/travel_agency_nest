@@ -5,9 +5,16 @@ import {
   BelongsToCreateAssociationMixin,
   CreationOptional,
   DataTypes,
-  HasOneGetAssociationMixin,
-  HasOneSetAssociationMixin,
-  HasOneCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
   InferCreationAttributes,
   InferAttributes,
   Model,
@@ -20,7 +27,7 @@ import type { Purchase } from './Purchase'
 import type { Sale } from './Sale'
 import type { TraveAgency } from './TraveAgency'
 
-type TransactionAssociations = 'purchase' | 'sale' | 'toHotel' | 'fromGuest' | 'toGuest' | 'fromTravelAgency' | 'toTravelAgency'
+type TransactionAssociations = 'purchases' | 'sales' | 'fromHotel' | 'fromAgency' | 'fromGuest' | 'toHotel' | 'toAgency' | 'toGuest'
 
 export class Transaction extends Model<
   InferAttributes<Transaction, {omit: TransactionAssociations}>,
@@ -28,29 +35,48 @@ export class Transaction extends Model<
 > {
   declare id: CreationOptional<number>
   declare amount: number
-  declare isVoid: boolean
-  declare isCredit: boolean
-  declare method: string | null
+  declare remaining: number | null
+  declare paymentType: 'partial' | 'full' | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
-  // Transaction hasOne Purchase
-  declare purchase?: NonAttribute<Purchase>
-  declare getPurchase: HasOneGetAssociationMixin<Purchase>
-  declare setPurchase: HasOneSetAssociationMixin<Purchase, number>
-  declare createPurchase: HasOneCreateAssociationMixin<Purchase>
+  // Transaction hasMany Purchase
+  declare purchases?: NonAttribute<Purchase[]>
+  declare getPurchases: HasManyGetAssociationsMixin<Purchase>
+  declare setPurchases: HasManySetAssociationsMixin<Purchase, number>
+  declare addPurchase: HasManyAddAssociationMixin<Purchase, number>
+  declare addPurchases: HasManyAddAssociationsMixin<Purchase, number>
+  declare createPurchase: HasManyCreateAssociationMixin<Purchase>
+  declare removePurchase: HasManyRemoveAssociationMixin<Purchase, number>
+  declare removePurchases: HasManyRemoveAssociationsMixin<Purchase, number>
+  declare hasPurchase: HasManyHasAssociationMixin<Purchase, number>
+  declare hasPurchases: HasManyHasAssociationsMixin<Purchase, number>
+  declare countPurchases: HasManyCountAssociationsMixin
   
-  // Transaction hasOne Sale
-  declare sale?: NonAttribute<Sale>
-  declare getSale: HasOneGetAssociationMixin<Sale>
-  declare setSale: HasOneSetAssociationMixin<Sale, number>
-  declare createSale: HasOneCreateAssociationMixin<Sale>
+  // Transaction hasMany Sale
+  declare sales?: NonAttribute<Sale[]>
+  declare getSales: HasManyGetAssociationsMixin<Sale>
+  declare setSales: HasManySetAssociationsMixin<Sale, number>
+  declare addSale: HasManyAddAssociationMixin<Sale, number>
+  declare addSales: HasManyAddAssociationsMixin<Sale, number>
+  declare createSale: HasManyCreateAssociationMixin<Sale>
+  declare removeSale: HasManyRemoveAssociationMixin<Sale, number>
+  declare removeSales: HasManyRemoveAssociationsMixin<Sale, number>
+  declare hasSale: HasManyHasAssociationMixin<Sale, number>
+  declare hasSales: HasManyHasAssociationsMixin<Sale, number>
+  declare countSales: HasManyCountAssociationsMixin
   
-  // Transaction belongsTo Hotel (as ToHotel)
-  declare toHotel?: NonAttribute<Hotel>
-  declare getToHotel: BelongsToGetAssociationMixin<Hotel>
-  declare setToHotel: BelongsToSetAssociationMixin<Hotel, number>
-  declare createToHotel: BelongsToCreateAssociationMixin<Hotel>
+  // Transaction belongsTo Hotel (as FromHotel)
+  declare fromHotel?: NonAttribute<Hotel>
+  declare getFromHotel: BelongsToGetAssociationMixin<Hotel>
+  declare setFromHotel: BelongsToSetAssociationMixin<Hotel, number>
+  declare createFromHotel: BelongsToCreateAssociationMixin<Hotel>
+  
+  // Transaction belongsTo TraveAgency (as FromAgency)
+  declare fromAgency?: NonAttribute<TraveAgency>
+  declare getFromAgency: BelongsToGetAssociationMixin<TraveAgency>
+  declare setFromAgency: BelongsToSetAssociationMixin<TraveAgency, number>
+  declare createFromAgency: BelongsToCreateAssociationMixin<TraveAgency>
   
   // Transaction belongsTo Guest (as FromGuest)
   declare fromGuest?: NonAttribute<Guest>
@@ -58,32 +84,33 @@ export class Transaction extends Model<
   declare setFromGuest: BelongsToSetAssociationMixin<Guest, number>
   declare createFromGuest: BelongsToCreateAssociationMixin<Guest>
   
+  // Transaction belongsTo Hotel (as ToHotel)
+  declare toHotel?: NonAttribute<Hotel>
+  declare getToHotel: BelongsToGetAssociationMixin<Hotel>
+  declare setToHotel: BelongsToSetAssociationMixin<Hotel, number>
+  declare createToHotel: BelongsToCreateAssociationMixin<Hotel>
+  
+  // Transaction belongsTo TraveAgency (as ToAgency)
+  declare toAgency?: NonAttribute<TraveAgency>
+  declare getToAgency: BelongsToGetAssociationMixin<TraveAgency>
+  declare setToAgency: BelongsToSetAssociationMixin<TraveAgency, number>
+  declare createToAgency: BelongsToCreateAssociationMixin<TraveAgency>
+  
   // Transaction belongsTo Guest (as ToGuest)
   declare toGuest?: NonAttribute<Guest>
   declare getToGuest: BelongsToGetAssociationMixin<Guest>
   declare setToGuest: BelongsToSetAssociationMixin<Guest, number>
   declare createToGuest: BelongsToCreateAssociationMixin<Guest>
   
-  // Transaction belongsTo TraveAgency (as FromTravelAgency)
-  declare fromTravelAgency?: NonAttribute<TraveAgency>
-  declare getFromTravelAgency: BelongsToGetAssociationMixin<TraveAgency>
-  declare setFromTravelAgency: BelongsToSetAssociationMixin<TraveAgency, number>
-  declare createFromTravelAgency: BelongsToCreateAssociationMixin<TraveAgency>
-  
-  // Transaction belongsTo TraveAgency (as ToTravelAgency)
-  declare toTravelAgency?: NonAttribute<TraveAgency>
-  declare getToTravelAgency: BelongsToGetAssociationMixin<TraveAgency>
-  declare setToTravelAgency: BelongsToSetAssociationMixin<TraveAgency, number>
-  declare createToTravelAgency: BelongsToCreateAssociationMixin<TraveAgency>
-  
   declare static associations: {
-    purchase: Association<Transaction, Purchase>,
-    sale: Association<Transaction, Sale>,
-    toHotel: Association<Transaction, Hotel>,
+    purchases: Association<Transaction, Purchase>,
+    sales: Association<Transaction, Sale>,
+    fromHotel: Association<Transaction, Hotel>,
+    fromAgency: Association<Transaction, TraveAgency>,
     fromGuest: Association<Transaction, Guest>,
-    toGuest: Association<Transaction, Guest>,
-    fromTravelAgency: Association<Transaction, TraveAgency>,
-    toTravelAgency: Association<Transaction, TraveAgency>
+    toHotel: Association<Transaction, Hotel>,
+    toAgency: Association<Transaction, TraveAgency>,
+    toGuest: Association<Transaction, Guest>
   }
 
   static initModel(sequelize: Sequelize): typeof Transaction {
@@ -98,16 +125,11 @@ export class Transaction extends Model<
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      isVoid: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
+      remaining: {
+        type: DataTypes.INTEGER
       },
-      isCredit: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
-      method: {
-        type: DataTypes.STRING
+      paymentType: {
+        type: DataTypes.ENUM('partial', 'full')
       },
       createdAt: {
         type: DataTypes.DATE

@@ -23,41 +23,77 @@ export function initModels(sequelize: Sequelize) {
   Guest.initModel(sequelize)
   TraveAgency.initModel(sequelize)
 
+  Purchase.belongsTo(Hotel, {
+    as: 'hotel',
+    foreignKey: 'hotelId'
+  })
+  Purchase.belongsTo(TraveAgency, {
+    as: 'traveAgency',
+    foreignKey: 'traveAgencyId'
+  })
   Purchase.belongsTo(Transaction, {
     as: 'transaction',
-    foreignKey: 'transaction_id'
+    foreignKey: 'transactionId'
   })
-  Transaction.hasOne(Purchase, {
-    as: 'purchase',
-    foreignKey: 'transaction_id'
+  Transaction.hasMany(Purchase, {
+    as: 'purchases',
+    foreignKey: 'transactionId'
   })
-  Transaction.hasOne(Sale, {
-    as: 'sale',
-    foreignKey: 'transaction_id'
+  Transaction.hasMany(Sale, {
+    as: 'sales',
+    foreignKey: 'transactionId'
   })
   Transaction.belongsTo(Hotel, {
-    as: 'toHotel',
-    foreignKey: 'to_hotel_id'
+    as: 'fromHotel',
+    foreignKey: 'fromHotelId'
+  })
+  Transaction.belongsTo(TraveAgency, {
+    as: 'fromAgency',
+    foreignKey: 'fromAgencyId'
   })
   Transaction.belongsTo(Guest, {
     as: 'fromGuest',
-    foreignKey: 'from_guest_id'
+    foreignKey: 'fromGuestId'
+  })
+  Transaction.belongsTo(Hotel, {
+    as: 'toHotel',
+    foreignKey: 'toHotelId'
+  })
+  Transaction.belongsTo(TraveAgency, {
+    as: 'toAgency',
+    foreignKey: 'toAgencyId'
   })
   Transaction.belongsTo(Guest, {
     as: 'toGuest',
-    foreignKey: 'to_guest_id'
-  })
-  Transaction.belongsTo(TraveAgency, {
-    as: 'fromTravelAgency',
-    foreignKey: 'from_travel_agency_id'
-  })
-  Transaction.belongsTo(TraveAgency, {
-    as: 'toTravelAgency',
-    foreignKey: 'to_travel_agency_id'
+    foreignKey: 'toGuestId'
   })
   Sale.belongsTo(Transaction, {
     as: 'transaction',
-    foreignKey: 'transaction_id'
+    foreignKey: 'transactionId'
+  })
+  Sale.belongsTo(TraveAgency, {
+    as: 'traveAgency',
+    foreignKey: 'traveAgencyId'
+  })
+  Sale.belongsTo(Guest, {
+    as: 'guest',
+    foreignKey: 'guestId'
+  })
+  Hotel.hasMany(Purchase, {
+    as: 'purchases',
+    foreignKey: 'hotelId'
+  })
+  Guest.hasMany(Sale, {
+    as: 'sales',
+    foreignKey: 'guestId'
+  })
+  TraveAgency.hasMany(Purchase, {
+    as: 'purchases',
+    foreignKey: 'traveAgencyId'
+  })
+  TraveAgency.hasMany(Sale, {
+    as: 'sales',
+    foreignKey: 'traveAgencyId'
   })
 
   return {
