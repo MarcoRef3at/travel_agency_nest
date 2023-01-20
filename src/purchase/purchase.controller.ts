@@ -1,13 +1,16 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
 import { PurchaseService } from './purchase.service'
+import { PurchaseDto } from './interfaces/purchase.interface';
+import { ValidationPipe } from '@nestjs/common';
 
 @Controller('purchase')
 export class PurchaseController {
      constructor(private purchaseService: PurchaseService) { }
 
      @Post()
-     async createPurchase() {
-          return await this.purchaseService.createPurchase()
+     @UsePipes(new ValidationPipe())
+     async createPurchase(@Body() body: PurchaseDto) {
+          return await this.purchaseService.createPurchase(body)
      }
 
      @Get()
