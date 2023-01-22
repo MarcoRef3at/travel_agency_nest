@@ -1,27 +1,19 @@
 import { Sequelize, Options } from 'sequelize'
-import configs from '../config/config'
-
-const env = process.env.NODE_ENV || 'development'
-// const config = {
-//   dialect: 'mysql',
-//   database: process.env.MYSQL_DB_NAME || 'travel_agency',
-//   username: process.env.MYSQL_DB_USERNAME || 'root',
-//   password: process.env.MYSQL_DB_PASSWORD || '336699',
-//   host: process.env.MYSQL_DB_HOST || 'localhost',
-//   port: parseInt(process.env.MYSQL_DB_PORT || '3306')
-// }
+import { config } from 'dotenv'
+config()
 
 
 const sequelize: Sequelize = new Sequelize({
   dialect: 'mysql',
-  database: process.env.MYSQL_DB_NAME || 'travel_agency',
-  username: process.env.MYSQL_DB_USERNAME || 'root',
-  password: process.env.MYSQL_DB_PASSWORD || '336699',
-  host: process.env.MYSQL_DB_HOST || 'localhost',
-  port: parseInt(process.env.MYSQL_DB_PORT || '3306'),
+  database: process.env.DB_NAME || 'travel_agency',
+  username: process.env.DB_USERNAME || 'root',
+  password: process.env.DB_PASSWORD || '336699',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '3306'),
   define: {
     underscored: true
-  }
+  },
+  logging: false
 })
 
 let db = {
