@@ -13,7 +13,7 @@ export class PurchaseService {
                return await this.db.Purchase.create(data)
           } catch (error) {
                console.log('error:', error)
-               throw new BadRequestException('Something wrong happened', { description: error.stack })
+               throw new BadRequestException('Something wrong happened', { description: error.message })
           }
      }
 }
