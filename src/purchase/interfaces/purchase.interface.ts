@@ -1,13 +1,20 @@
 import { IsNotEmpty, IsNumber, IsPositive, IsOptional } from 'class-validator';
+import { Purchase, PurchaseAssociations } from './../../../models/Purchase'
+import { InferAttributes } from 'sequelize'
 
-export interface PurchaseInterface {
-     id: number;
-     amount: number;
-     hotel_id: number;
-     agency_id: number;
-     transaction_id: number | null;
+// export interface PurchaseInterface {
+//      id: number;
+//      amount: number;
+//      hotel_id: number;
+//      agency_id: number;
+//      transaction_id: number | null;
+// }
+
+
+export interface PurchaseInterface extends InferAttributes<Purchase, {
+     omit: 'createdAt' | 'updatedAt' | PurchaseAssociations
+}> {
 }
-
 export class PurchaseDto implements PurchaseInterface {
      id: number;
 
@@ -16,11 +23,11 @@ export class PurchaseDto implements PurchaseInterface {
      amount: number;
 
      @IsNotEmpty()
-     hotel_id: number;
+     hotelId: number;
 
      @IsOptional()
      @IsNotEmpty()
-     agency_id: number;
+     agencyId: number;
 
      @IsNumber()
      @IsOptional()

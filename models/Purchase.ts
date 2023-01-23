@@ -15,7 +15,7 @@ import { Agency } from './Agency'
 import { Hotel } from './Hotel'
 import type { Transaction } from './Transaction'
 
-type PurchaseAssociations = 'hotel' | 'agency' | 'transaction'
+export type PurchaseAssociations = 'hotel' | 'agency' | 'transaction'
 
 export class Purchase extends Model<
   InferAttributes<Purchase, { omit: PurchaseAssociations }>,
