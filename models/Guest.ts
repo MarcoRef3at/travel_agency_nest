@@ -23,8 +23,8 @@ import type { Sale } from './Sale'
 type GuestAssociations = 'sales'
 
 export class Guest extends Model<
-  InferAttributes<Guest, {omit: GuestAssociations}>,
-  InferCreationAttributes<Guest, {omit: GuestAssociations}>
+  InferAttributes<Guest, { omit: GuestAssociations }>,
+  InferCreationAttributes<Guest, { omit: GuestAssociations }>
 > {
   declare id: CreationOptional<number>
   declare name: string | null
@@ -43,7 +43,7 @@ export class Guest extends Model<
   declare hasSale: HasManyHasAssociationMixin<Sale, number>
   declare hasSales: HasManyHasAssociationsMixin<Sale, number>
   declare countSales: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     sales: Association<Guest, Sale>
   }
@@ -69,7 +69,7 @@ export class Guest extends Model<
     }, {
       sequelize
     })
-    
+
     return Guest
   }
 }

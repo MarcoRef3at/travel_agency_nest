@@ -16,20 +16,20 @@ export {
 }
 
 export function initModels(sequelize: Sequelize) {
-  Purchase.initModel(sequelize)
-  Transaction.initModel(sequelize)
-  Sale.initModel(sequelize)
+  Agency.initModel(sequelize)
   Hotel.initModel(sequelize)
   Guest.initModel(sequelize)
-  Agency.initModel(sequelize)
+  Sale.initModel(sequelize)
+  Transaction.initModel(sequelize)
+  Purchase.initModel(sequelize)
 
   Purchase.belongsTo(Hotel, {
     as: 'hotel',
     foreignKey: 'hotelId'
   })
   Purchase.belongsTo(Agency, {
-    as: 'traveAgency',
-    foreignKey: 'traveAgencyId'
+    as: 'agency',
+    foreignKey: 'agencyId'
   })
   Purchase.belongsTo(Transaction, {
     as: 'transaction',
@@ -72,8 +72,8 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'transactionId'
   })
   Sale.belongsTo(Agency, {
-    as: 'traveAgency',
-    foreignKey: 'traveAgencyId'
+    as: 'agency',
+    foreignKey: 'agencyId'
   })
   Sale.belongsTo(Guest, {
     as: 'guest',
@@ -89,11 +89,11 @@ export function initModels(sequelize: Sequelize) {
   })
   Agency.hasMany(Purchase, {
     as: 'purchases',
-    foreignKey: 'traveAgencyId'
+    foreignKey: 'agencyId'
   })
   Agency.hasMany(Sale, {
     as: 'sales',
-    foreignKey: 'traveAgencyId'
+    foreignKey: 'agencyId'
   })
 
   return {

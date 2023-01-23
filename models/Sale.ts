@@ -11,15 +11,15 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import type { Agency } from './Agency'
 import type { Guest } from './Guest'
 import type { Transaction } from './Transaction'
-import type { Agency } from './Agency'
 
-type SaleAssociations = 'transaction' | 'traveAgency' | 'guest'
+type SaleAssociations = 'transaction' | 'agency' | 'guest'
 
 export class Sale extends Model<
-  InferAttributes<Sale, {omit: SaleAssociations}>,
-  InferCreationAttributes<Sale, {omit: SaleAssociations}>
+  InferAttributes<Sale, { omit: SaleAssociations }>,
+  InferCreationAttributes<Sale, { omit: SaleAssociations }>
 > {
   declare id: CreationOptional<number>
   declare amount: number | null
@@ -32,22 +32,22 @@ export class Sale extends Model<
   declare getTransaction: BelongsToGetAssociationMixin<Transaction>
   declare setTransaction: BelongsToSetAssociationMixin<Transaction, number>
   declare createTransaction: BelongsToCreateAssociationMixin<Transaction>
-  
+
   // Sale belongsTo Agency
-  declare traveAgency?: NonAttribute<Agency>
+  declare agency?: NonAttribute<Agency>
   declare getAgency: BelongsToGetAssociationMixin<Agency>
   declare setAgency: BelongsToSetAssociationMixin<Agency, number>
   declare createAgency: BelongsToCreateAssociationMixin<Agency>
-  
+
   // Sale belongsTo Guest
   declare guest?: NonAttribute<Guest>
   declare getGuest: BelongsToGetAssociationMixin<Guest>
   declare setGuest: BelongsToSetAssociationMixin<Guest, number>
   declare createGuest: BelongsToCreateAssociationMixin<Guest>
-  
+
   declare static associations: {
     transaction: Association<Sale, Transaction>,
-    traveAgency: Association<Sale, Agency>,
+    agency: Association<Sale, Agency>,
     guest: Association<Sale, Guest>
   }
 
@@ -74,7 +74,7 @@ export class Sale extends Model<
     }, {
       sequelize
     })
-    
+
     return Sale
   }
 }

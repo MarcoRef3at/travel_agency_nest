@@ -23,8 +23,8 @@ import type { Purchase } from './Purchase'
 type HotelAssociations = 'purchases'
 
 export class Hotel extends Model<
-  InferAttributes<Hotel, {omit: HotelAssociations}>,
-  InferCreationAttributes<Hotel, {omit: HotelAssociations}>
+  InferAttributes<Hotel, { omit: HotelAssociations }>,
+  InferCreationAttributes<Hotel, { omit: HotelAssociations }>
 > {
   declare id: CreationOptional<number>
   declare name: string | null
@@ -43,7 +43,7 @@ export class Hotel extends Model<
   declare hasPurchase: HasManyHasAssociationMixin<Purchase, number>
   declare hasPurchases: HasManyHasAssociationsMixin<Purchase, number>
   declare countPurchases: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
     purchases: Association<Hotel, Purchase>
   }
@@ -69,7 +69,7 @@ export class Hotel extends Model<
     }, {
       sequelize
     })
-    
+
     return Hotel
   }
 }

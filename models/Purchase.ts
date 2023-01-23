@@ -11,11 +11,11 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import { Agency } from './Agency'
 import { Hotel } from './Hotel'
 import type { Transaction } from './Transaction'
-import { Agency } from './Agency'
 
-type PurchaseAssociations = 'hotel' | 'traveAgency' | 'transaction'
+type PurchaseAssociations = 'hotel' | 'agency' | 'transaction'
 
 export class Purchase extends Model<
   InferAttributes<Purchase, { omit: PurchaseAssociations }>,
@@ -23,8 +23,8 @@ export class Purchase extends Model<
 > {
   declare id: CreationOptional<number>
   declare amount: number | null
-  declare hotelId: number
-  declare traveAgencyId: number | null
+  declare hotelId: number | null
+  declare agencyId: number | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -35,7 +35,7 @@ export class Purchase extends Model<
   declare createHotel: BelongsToCreateAssociationMixin<Hotel>
 
   // Purchase belongsTo Agency
-  declare traveAgency?: NonAttribute<Agency>
+  declare agency?: NonAttribute<Agency>
   declare getAgency: BelongsToGetAssociationMixin<Agency>
   declare setAgency: BelongsToSetAssociationMixin<Agency, number>
   declare createAgency: BelongsToCreateAssociationMixin<Agency>
@@ -48,10 +48,9 @@ export class Purchase extends Model<
 
   declare static associations: {
     hotel: Association<Purchase, Hotel>,
-    traveAgency: Association<Purchase, Agency>,
+    agency: Association<Purchase, Agency>,
     transaction: Association<Purchase, Transaction>
   }
-
   static initModel(sequelize: Sequelize): typeof Purchase {
     Purchase.init({
       id: {
@@ -67,30 +66,10 @@ export class Purchase extends Model<
       hotelId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Hotel',
-          key: 'id'
-        },
-        validate: {
-          isExist: function (value) {
-            console.log('value:', value)
-            return Hotel.findByPk(value)
-              .then(hotel => {
-                console.log('hotel:', hotel)
-                if (!hotel) {
-                  throw new Error('Invalid hotel ID');
-                }
-              });
-          }
-        }
       },
-      traveAgencyId: {
+      agencyId: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        references: {
-          model: 'Agency',
-          key: 'id'
-        },
         defaultValue: null,
       },
       createdAt: {
@@ -110,16 +89,18 @@ export class Purchase extends Model<
           if (!hotel) {
             throw new Error('Invalid hotel ID');
           } else {
-            if (purchase.traveAgencyId) {
-              return Agency.findByPk(purchase.traveAgencyId)
+            if (purchase.agencyId) {
+              return Agency.findByPk(purchase.agencyId)
                 .then(travelAgency => {
                   if (!travelAgency) {
                     throw new Error('Invalid travel agency ID');
                   }
-                })
+                }).catch(err => { console.log(err) })
             }
           }
-        });
+        }).catch(err => {
+          console.log(err)
+        })
     })
     return Purchase
   }

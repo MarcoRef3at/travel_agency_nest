@@ -13,7 +13,7 @@ const sequelize: Sequelize = new Sequelize({
   define: {
     underscored: true
   },
-  logging: false
+  logging: true
 })
 
 let db = {

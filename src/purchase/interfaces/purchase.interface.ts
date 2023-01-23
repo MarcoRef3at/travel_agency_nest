@@ -4,7 +4,7 @@ export interface PurchaseInterface {
      id: number;
      amount: number;
      hotel_id: number;
-     trave_agency_id: number;
+     agency_id: number;
      transaction_id: number | null;
 }
 
@@ -20,7 +20,7 @@ export class PurchaseDto implements PurchaseInterface {
 
      @IsOptional()
      @IsNotEmpty()
-     trave_agency_id: number;
+     agency_id: number;
 
      @IsNumber()
      @IsOptional()

@@ -21,17 +21,17 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import type { Agency } from './Agency'
 import type { Guest } from './Guest'
 import type { Hotel } from './Hotel'
 import type { Purchase } from './Purchase'
 import type { Sale } from './Sale'
-import type { Agency } from './Agency'
 
 type TransactionAssociations = 'purchases' | 'sales' | 'fromHotel' | 'fromAgency' | 'fromGuest' | 'toHotel' | 'toAgency' | 'toGuest'
 
 export class Transaction extends Model<
-  InferAttributes<Transaction, {omit: TransactionAssociations}>,
-  InferCreationAttributes<Transaction, {omit: TransactionAssociations}>
+  InferAttributes<Transaction, { omit: TransactionAssociations }>,
+  InferCreationAttributes<Transaction, { omit: TransactionAssociations }>
 > {
   declare id: CreationOptional<number>
   declare amount: number
@@ -52,7 +52,7 @@ export class Transaction extends Model<
   declare hasPurchase: HasManyHasAssociationMixin<Purchase, number>
   declare hasPurchases: HasManyHasAssociationsMixin<Purchase, number>
   declare countPurchases: HasManyCountAssociationsMixin
-  
+
   // Transaction hasMany Sale
   declare sales?: NonAttribute<Sale[]>
   declare getSales: HasManyGetAssociationsMixin<Sale>
@@ -65,43 +65,43 @@ export class Transaction extends Model<
   declare hasSale: HasManyHasAssociationMixin<Sale, number>
   declare hasSales: HasManyHasAssociationsMixin<Sale, number>
   declare countSales: HasManyCountAssociationsMixin
-  
+
   // Transaction belongsTo Hotel (as FromHotel)
   declare fromHotel?: NonAttribute<Hotel>
   declare getFromHotel: BelongsToGetAssociationMixin<Hotel>
   declare setFromHotel: BelongsToSetAssociationMixin<Hotel, number>
   declare createFromHotel: BelongsToCreateAssociationMixin<Hotel>
-  
+
   // Transaction belongsTo Agency (as FromAgency)
   declare fromAgency?: NonAttribute<Agency>
   declare getFromAgency: BelongsToGetAssociationMixin<Agency>
   declare setFromAgency: BelongsToSetAssociationMixin<Agency, number>
   declare createFromAgency: BelongsToCreateAssociationMixin<Agency>
-  
+
   // Transaction belongsTo Guest (as FromGuest)
   declare fromGuest?: NonAttribute<Guest>
   declare getFromGuest: BelongsToGetAssociationMixin<Guest>
   declare setFromGuest: BelongsToSetAssociationMixin<Guest, number>
   declare createFromGuest: BelongsToCreateAssociationMixin<Guest>
-  
+
   // Transaction belongsTo Hotel (as ToHotel)
   declare toHotel?: NonAttribute<Hotel>
   declare getToHotel: BelongsToGetAssociationMixin<Hotel>
   declare setToHotel: BelongsToSetAssociationMixin<Hotel, number>
   declare createToHotel: BelongsToCreateAssociationMixin<Hotel>
-  
+
   // Transaction belongsTo Agency (as ToAgency)
   declare toAgency?: NonAttribute<Agency>
   declare getToAgency: BelongsToGetAssociationMixin<Agency>
   declare setToAgency: BelongsToSetAssociationMixin<Agency, number>
   declare createToAgency: BelongsToCreateAssociationMixin<Agency>
-  
+
   // Transaction belongsTo Guest (as ToGuest)
   declare toGuest?: NonAttribute<Guest>
   declare getToGuest: BelongsToGetAssociationMixin<Guest>
   declare setToGuest: BelongsToSetAssociationMixin<Guest, number>
   declare createToGuest: BelongsToCreateAssociationMixin<Guest>
-  
+
   declare static associations: {
     purchases: Association<Transaction, Purchase>,
     sales: Association<Transaction, Sale>,
@@ -140,7 +140,7 @@ export class Transaction extends Model<
     }, {
       sequelize
     })
-    
+
     return Transaction
   }
 }
