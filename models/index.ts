@@ -4,7 +4,7 @@ import { Transaction } from './Transaction'
 import { Sale } from './Sale'
 import { Hotel } from './Hotel'
 import { Guest } from './Guest'
-import { TraveAgency } from './TraveAgency'
+import { Agency } from './Agency'
 
 export {
   Purchase,
@@ -12,7 +12,7 @@ export {
   Sale,
   Hotel,
   Guest,
-  TraveAgency
+  Agency
 }
 
 export function initModels(sequelize: Sequelize) {
@@ -21,13 +21,13 @@ export function initModels(sequelize: Sequelize) {
   Sale.initModel(sequelize)
   Hotel.initModel(sequelize)
   Guest.initModel(sequelize)
-  TraveAgency.initModel(sequelize)
+  Agency.initModel(sequelize)
 
   Purchase.belongsTo(Hotel, {
     as: 'hotel',
     foreignKey: 'hotelId'
   })
-  Purchase.belongsTo(TraveAgency, {
+  Purchase.belongsTo(Agency, {
     as: 'traveAgency',
     foreignKey: 'traveAgencyId'
   })
@@ -47,7 +47,7 @@ export function initModels(sequelize: Sequelize) {
     as: 'fromHotel',
     foreignKey: 'fromHotelId'
   })
-  Transaction.belongsTo(TraveAgency, {
+  Transaction.belongsTo(Agency, {
     as: 'fromAgency',
     foreignKey: 'fromAgencyId'
   })
@@ -59,7 +59,7 @@ export function initModels(sequelize: Sequelize) {
     as: 'toHotel',
     foreignKey: 'toHotelId'
   })
-  Transaction.belongsTo(TraveAgency, {
+  Transaction.belongsTo(Agency, {
     as: 'toAgency',
     foreignKey: 'toAgencyId'
   })
@@ -71,7 +71,7 @@ export function initModels(sequelize: Sequelize) {
     as: 'transaction',
     foreignKey: 'transactionId'
   })
-  Sale.belongsTo(TraveAgency, {
+  Sale.belongsTo(Agency, {
     as: 'traveAgency',
     foreignKey: 'traveAgencyId'
   })
@@ -87,11 +87,11 @@ export function initModels(sequelize: Sequelize) {
     as: 'sales',
     foreignKey: 'guestId'
   })
-  TraveAgency.hasMany(Purchase, {
+  Agency.hasMany(Purchase, {
     as: 'purchases',
     foreignKey: 'traveAgencyId'
   })
-  TraveAgency.hasMany(Sale, {
+  Agency.hasMany(Sale, {
     as: 'sales',
     foreignKey: 'traveAgencyId'
   })
@@ -102,6 +102,6 @@ export function initModels(sequelize: Sequelize) {
     Sale,
     Hotel,
     Guest,
-    TraveAgency
+    Agency
   }
 }

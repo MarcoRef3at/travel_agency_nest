@@ -13,7 +13,7 @@ import {
 } from 'sequelize'
 import type { Guest } from './Guest'
 import type { Transaction } from './Transaction'
-import type { TraveAgency } from './TraveAgency'
+import type { Agency } from './Agency'
 
 type SaleAssociations = 'transaction' | 'traveAgency' | 'guest'
 
@@ -33,11 +33,11 @@ export class Sale extends Model<
   declare setTransaction: BelongsToSetAssociationMixin<Transaction, number>
   declare createTransaction: BelongsToCreateAssociationMixin<Transaction>
   
-  // Sale belongsTo TraveAgency
-  declare traveAgency?: NonAttribute<TraveAgency>
-  declare getTraveAgency: BelongsToGetAssociationMixin<TraveAgency>
-  declare setTraveAgency: BelongsToSetAssociationMixin<TraveAgency, number>
-  declare createTraveAgency: BelongsToCreateAssociationMixin<TraveAgency>
+  // Sale belongsTo Agency
+  declare traveAgency?: NonAttribute<Agency>
+  declare getAgency: BelongsToGetAssociationMixin<Agency>
+  declare setAgency: BelongsToSetAssociationMixin<Agency, number>
+  declare createAgency: BelongsToCreateAssociationMixin<Agency>
   
   // Sale belongsTo Guest
   declare guest?: NonAttribute<Guest>
@@ -47,7 +47,7 @@ export class Sale extends Model<
   
   declare static associations: {
     transaction: Association<Sale, Transaction>,
-    traveAgency: Association<Sale, TraveAgency>,
+    traveAgency: Association<Sale, Agency>,
     guest: Association<Sale, Guest>
   }
 

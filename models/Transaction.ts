@@ -25,7 +25,7 @@ import type { Guest } from './Guest'
 import type { Hotel } from './Hotel'
 import type { Purchase } from './Purchase'
 import type { Sale } from './Sale'
-import type { TraveAgency } from './TraveAgency'
+import type { Agency } from './Agency'
 
 type TransactionAssociations = 'purchases' | 'sales' | 'fromHotel' | 'fromAgency' | 'fromGuest' | 'toHotel' | 'toAgency' | 'toGuest'
 
@@ -72,11 +72,11 @@ export class Transaction extends Model<
   declare setFromHotel: BelongsToSetAssociationMixin<Hotel, number>
   declare createFromHotel: BelongsToCreateAssociationMixin<Hotel>
   
-  // Transaction belongsTo TraveAgency (as FromAgency)
-  declare fromAgency?: NonAttribute<TraveAgency>
-  declare getFromAgency: BelongsToGetAssociationMixin<TraveAgency>
-  declare setFromAgency: BelongsToSetAssociationMixin<TraveAgency, number>
-  declare createFromAgency: BelongsToCreateAssociationMixin<TraveAgency>
+  // Transaction belongsTo Agency (as FromAgency)
+  declare fromAgency?: NonAttribute<Agency>
+  declare getFromAgency: BelongsToGetAssociationMixin<Agency>
+  declare setFromAgency: BelongsToSetAssociationMixin<Agency, number>
+  declare createFromAgency: BelongsToCreateAssociationMixin<Agency>
   
   // Transaction belongsTo Guest (as FromGuest)
   declare fromGuest?: NonAttribute<Guest>
@@ -90,11 +90,11 @@ export class Transaction extends Model<
   declare setToHotel: BelongsToSetAssociationMixin<Hotel, number>
   declare createToHotel: BelongsToCreateAssociationMixin<Hotel>
   
-  // Transaction belongsTo TraveAgency (as ToAgency)
-  declare toAgency?: NonAttribute<TraveAgency>
-  declare getToAgency: BelongsToGetAssociationMixin<TraveAgency>
-  declare setToAgency: BelongsToSetAssociationMixin<TraveAgency, number>
-  declare createToAgency: BelongsToCreateAssociationMixin<TraveAgency>
+  // Transaction belongsTo Agency (as ToAgency)
+  declare toAgency?: NonAttribute<Agency>
+  declare getToAgency: BelongsToGetAssociationMixin<Agency>
+  declare setToAgency: BelongsToSetAssociationMixin<Agency, number>
+  declare createToAgency: BelongsToCreateAssociationMixin<Agency>
   
   // Transaction belongsTo Guest (as ToGuest)
   declare toGuest?: NonAttribute<Guest>
@@ -106,10 +106,10 @@ export class Transaction extends Model<
     purchases: Association<Transaction, Purchase>,
     sales: Association<Transaction, Sale>,
     fromHotel: Association<Transaction, Hotel>,
-    fromAgency: Association<Transaction, TraveAgency>,
+    fromAgency: Association<Transaction, Agency>,
     fromGuest: Association<Transaction, Guest>,
     toHotel: Association<Transaction, Hotel>,
-    toAgency: Association<Transaction, TraveAgency>,
+    toAgency: Association<Transaction, Agency>,
     toGuest: Association<Transaction, Guest>
   }
 

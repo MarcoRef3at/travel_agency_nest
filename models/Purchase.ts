@@ -13,7 +13,7 @@ import {
 } from 'sequelize'
 import { Hotel } from './Hotel'
 import type { Transaction } from './Transaction'
-import { TraveAgency } from './TraveAgency'
+import { Agency } from './Agency'
 
 type PurchaseAssociations = 'hotel' | 'traveAgency' | 'transaction'
 
@@ -34,11 +34,11 @@ export class Purchase extends Model<
   declare setHotel: BelongsToSetAssociationMixin<Hotel, number>
   declare createHotel: BelongsToCreateAssociationMixin<Hotel>
 
-  // Purchase belongsTo TraveAgency
-  declare traveAgency?: NonAttribute<TraveAgency>
-  declare getTraveAgency: BelongsToGetAssociationMixin<TraveAgency>
-  declare setTraveAgency: BelongsToSetAssociationMixin<TraveAgency, number>
-  declare createTraveAgency: BelongsToCreateAssociationMixin<TraveAgency>
+  // Purchase belongsTo Agency
+  declare traveAgency?: NonAttribute<Agency>
+  declare getAgency: BelongsToGetAssociationMixin<Agency>
+  declare setAgency: BelongsToSetAssociationMixin<Agency, number>
+  declare createAgency: BelongsToCreateAssociationMixin<Agency>
 
   // Purchase belongsTo Transaction
   declare transaction?: NonAttribute<Transaction>
@@ -48,7 +48,7 @@ export class Purchase extends Model<
 
   declare static associations: {
     hotel: Association<Purchase, Hotel>,
-    traveAgency: Association<Purchase, TraveAgency>,
+    traveAgency: Association<Purchase, Agency>,
     transaction: Association<Purchase, Transaction>
   }
 
@@ -88,7 +88,7 @@ export class Purchase extends Model<
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-          model: 'TraveAgency',
+          model: 'Agency',
           key: 'id'
         },
         defaultValue: null,
@@ -111,7 +111,7 @@ export class Purchase extends Model<
             throw new Error('Invalid hotel ID');
           } else {
             if (purchase.traveAgencyId) {
-              return TraveAgency.findByPk(purchase.traveAgencyId)
+              return Agency.findByPk(purchase.traveAgencyId)
                 .then(travelAgency => {
                   if (!travelAgency) {
                     throw new Error('Invalid travel agency ID');

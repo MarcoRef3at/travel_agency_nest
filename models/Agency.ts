@@ -21,18 +21,18 @@ import {
 import type { Purchase } from './Purchase'
 import type { Sale } from './Sale'
 
-type TraveAgencyAssociations = 'purchases' | 'sales'
+type AgencyAssociations = 'purchases' | 'sales'
 
-export class TraveAgency extends Model<
-  InferAttributes<TraveAgency, {omit: TraveAgencyAssociations}>,
-  InferCreationAttributes<TraveAgency, {omit: TraveAgencyAssociations}>
+export class Agency extends Model<
+  InferAttributes<Agency, { omit: AgencyAssociations }>,
+  InferCreationAttributes<Agency, { omit: AgencyAssociations }>
 > {
   declare id: CreationOptional<number>
   declare name: string | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
-  // TraveAgency hasMany Purchase
+  // Agency hasMany Purchase
   declare purchases?: NonAttribute<Purchase[]>
   declare getPurchases: HasManyGetAssociationsMixin<Purchase>
   declare setPurchases: HasManySetAssociationsMixin<Purchase, number>
@@ -44,8 +44,8 @@ export class TraveAgency extends Model<
   declare hasPurchase: HasManyHasAssociationMixin<Purchase, number>
   declare hasPurchases: HasManyHasAssociationsMixin<Purchase, number>
   declare countPurchases: HasManyCountAssociationsMixin
-  
-  // TraveAgency hasMany Sale
+
+  // Agency hasMany Sale
   declare sales?: NonAttribute<Sale[]>
   declare getSales: HasManyGetAssociationsMixin<Sale>
   declare setSales: HasManySetAssociationsMixin<Sale, number>
@@ -57,14 +57,14 @@ export class TraveAgency extends Model<
   declare hasSale: HasManyHasAssociationMixin<Sale, number>
   declare hasSales: HasManyHasAssociationsMixin<Sale, number>
   declare countSales: HasManyCountAssociationsMixin
-  
+
   declare static associations: {
-    purchases: Association<TraveAgency, Purchase>,
-    sales: Association<TraveAgency, Sale>
+    purchases: Association<Agency, Purchase>,
+    sales: Association<Agency, Sale>
   }
 
-  static initModel(sequelize: Sequelize): typeof TraveAgency {
-    TraveAgency.init({
+  static initModel(sequelize: Sequelize): typeof Agency {
+    Agency.init({
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -83,7 +83,7 @@ export class TraveAgency extends Model<
     }, {
       sequelize
     })
-    
-    return TraveAgency
+
+    return Agency
   }
 }
