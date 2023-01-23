@@ -20,7 +20,8 @@ export type PurchaseAssociations = 'hotel' | 'agency' | 'transaction'
 export class Purchase extends Model<
   InferAttributes<Purchase, { omit: PurchaseAssociations }>,
   InferCreationAttributes<Purchase, { omit: PurchaseAssociations }>
-> {
+  > {
+  // Interface for the model
   declare id: CreationOptional<number>
   declare amount: number | null
   declare hotelId: number | null
