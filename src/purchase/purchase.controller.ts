@@ -13,22 +13,22 @@ export class PurchaseController {
      }
 
      @Get()
-     getAllPurchases() {
-          return 'getAllPurchases'
+     async getAllPurchases() {
+          return await this.purchaseService.getAllPurchases()
      }
 
      @Get(':id')
-     getOnePurchase(@Param('id') id: string) {
-          return `Retrieving Purchase ${id}`
+     async getOnePurchase(@Param('id') id: string) {
+          return await this.purchaseService.getOnePurchase(id)
      }
 
      @Put(':id')
-     UpdatePurchase(@Param('id') id: string) {
-          return 'UpdatePurchase'
+     async UpdatePurchase(@Param('id') id: string, @Body(new ValidationPipe()) body: PurchaseDto) {
+          return await this.purchaseService.UpdatePurchase(id, body)
      }
 
      @Delete(':id')
-     VoidPurchase(@Param('id') id: string) {
-          return 'UpdatePurchase'
+     async VoidPurchase(@Param('id') id: string) {
+          return await this.purchaseService.VoidPurchase(id)
      }
 }
