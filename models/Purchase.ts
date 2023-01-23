@@ -72,22 +72,22 @@ export class Purchase extends Model<
       sequelize
     })
 
-    //add validation for foriegn keys to check that it exists
-    // Purchase.addHook('beforeCreate', async (purchase: Purchase) => {
-    //   const hotel = await purchase.getHotel()
-    //   const traveAgency = await purchase.getTraveAgency()
-    //   const transaction = await purchase.getTransaction()
+    // add validation for foriegn keys to check that it exists
+    Purchase.addHook('beforeCreate', async (purchase: Purchase) => {
+      const hotel = await purchase.getHotel()
+      const traveAgency = await purchase.getTraveAgency()
+      const transaction = await purchase.getTransaction()
 
-    //   if (!hotel) {
-    //     throw new Error('Hotel not found')
-    //   }
-    //   if (!traveAgency) {
-    //     throw new Error('Travel agency not found')
-    //   }
-    //   if (!transaction) {
-    //     throw new Error('Transaction not found')
-    //   }
-    // })
+      if (!hotel) {
+        throw new Error('Hotel not found')
+      }
+      if (!traveAgency) {
+        throw new Error('Travel agency not found')
+      }
+      if (!transaction) {
+        throw new Error('Transaction not found')
+      }
+    })
 
     return Purchase
   }
