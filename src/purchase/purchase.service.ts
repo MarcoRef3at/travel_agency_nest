@@ -11,7 +11,7 @@ export class PurchaseService {
           try {
                return await this.db.Purchase.create(data)
           } catch (error) {
-               console.log('error:', error)
+               console.log('createPurchase error:', error)
                throw new BadRequestException('Something wrong happened', { description: error.message })
           }
      }
