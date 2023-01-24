@@ -27,7 +27,7 @@ import type { Hotel } from './Hotel'
 import type { Purchase } from './Purchase'
 import type { Sale } from './Sale'
 
-type TransactionAssociations = 'purchases' | 'sales' | 'fromHotel' | 'fromAgency' | 'fromGuest' | 'toHotel' | 'toAgency' | 'toGuest'
+export type TransactionAssociations = 'purchases' | 'sales' | 'fromHotel' | 'fromAgency' | 'fromGuest' | 'toHotel' | 'toAgency' | 'toGuest'
 
 export class Transaction extends Model<
   InferAttributes<Transaction, { omit: TransactionAssociations }>,
@@ -119,7 +119,8 @@ export class Transaction extends Model<
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
-        unique: true
+        unique: true,
+        autoIncrement: true
       },
       amount: {
         type: DataTypes.INTEGER,
