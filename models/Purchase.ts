@@ -23,6 +23,8 @@ export class Purchase extends Model<
   declare id: CreationOptional<number>
   declare amount: number | null
   declare status: string | null
+  declare account_id: number
+  declare transaction_id: number | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -49,13 +51,30 @@ export class Purchase extends Model<
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
-        unique: true
+        unique: true,
+        autoIncrement: true
       },
       amount: {
         type: DataTypes.INTEGER
       },
       status: {
         type: DataTypes.STRING
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'accounts',
+          key: 'id'
+        }
+      },
+      transaction_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'transactions',
+          key: 'id'
+        }
       },
       createdAt: {
         type: DataTypes.DATE

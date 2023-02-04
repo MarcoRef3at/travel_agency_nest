@@ -5,6 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert('Guests', [{
       id: 1,
       name: 'Guest Test',
+      account_id: 4,
     }], {});
   },
 
