@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Post, Put, Delete, Param } from '@nestjs/common';
 import { TransactionService } from './transaction.service'
-import { TransactionDto } from './interfaces/transaction.interface';
+// import { TransactionDto } from './interfaces/transaction.interface';
 import { ValidationPipe } from '@nestjs/common';
 @Controller('transaction')
 export class TransactionController {
      constructor(private transactionService: TransactionService) { }
 
      @Post()
-     async createTransaction(@Body() body: TransactionDto) {
+     async createTransaction(@Body() body) {
           return await this.transactionService.createTransaction(body)
      }
 
@@ -22,7 +22,7 @@ export class TransactionController {
      }
 
      @Put(':id')
-     async UpdateTransaction(@Param('id') id: string, @Body(new ValidationPipe()) body: TransactionDto) {
+     async UpdateTransaction(@Param('id') id: string, @Body(new ValidationPipe()) body) {
           return await this.transactionService.UpdateTransaction(id, body)
      }
 

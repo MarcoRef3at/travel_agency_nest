@@ -1,25 +1,25 @@
 import { IsNotEmpty, IsNumber, IsPositive, IsOptional } from 'class-validator';
-import { Sale, SaleAssociations } from './../../../models/Sale'
+import { Sale, SaleAssociations } from '../../../models/Sale'
 import { InferAttributes } from 'sequelize'
 
 export interface SaleInterface extends InferAttributes<Sale, {
      omit: 'createdAt' | 'updatedAt' | SaleAssociations
 }> {
 }
-export class SaleDto implements SaleInterface {
-     id: number;
+// export class SaleDto implements SaleInterface {
+//      id: number;
 
-     @IsPositive()
-     @IsNumber()
-     amount: number;
+//      @IsPositive()
+//      @IsNumber()
+//      amount: number;
 
-     status: string;
+//      status: string;
 
-     guestId: number;
+//      guestId: number;
 
-     agencyId: number;
+//      agencyId: number;
 
-     @IsNumber()
-     @IsOptional()
-     transactionId: number;
-}
+//      @IsNumber()
+//      @IsOptional()
+//      transactionId: number;
+// }

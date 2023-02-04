@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import db from './../../models/db'
+import db from '../../models/db'
 import { PurchaseInterface } from './interfaces/purchase.interface';
 @Injectable()
 export class PurchaseService {
@@ -27,7 +27,24 @@ export class PurchaseService {
 
      async getOnePurchase(id: string) {
           try {
-               return await this.db.Purchase.findByPk(id)
+               return await this.db.Purchase.findByPk(id, {
+                    attributes: {
+                         exclude: ['agencyId', 'hotelId', 'updatedAt'],
+                    },
+                    include: [
+                         {
+                              model: this.db.Agency,
+                              as: 'agency',
+                              attributes: ['id', 'name']
+                         },
+                         {
+                              model: this.db.Hotel,
+                              as: 'hotel',
+                              attributes: ['id', 'name']
+                         },
+                    ]
+               })
+
           } catch (error) {
                console.log('error:', error)
                throw new BadRequestException('Something wrong happened', { description: error.message })

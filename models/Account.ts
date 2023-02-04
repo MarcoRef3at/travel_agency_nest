@@ -1,8 +1,5 @@
 import {
   Association,
-  BelongsToGetAssociationMixin,
-  BelongsToSetAssociationMixin,
-  BelongsToCreateAssociationMixin,
   CreationOptional,
   DataTypes,
   HasManyGetAssociationsMixin,
@@ -15,30 +12,35 @@ import {
   HasManyHasAssociationMixin,
   HasManyHasAssociationsMixin,
   HasManyCountAssociationsMixin,
+  HasOneGetAssociationMixin,
+  HasOneSetAssociationMixin,
+  HasOneCreateAssociationMixin,
   InferCreationAttributes,
   InferAttributes,
   Model,
   NonAttribute,
   Sequelize
 } from 'sequelize'
-import type { Account } from './Account'
+import type { Agency } from './Agency'
+import type { Guest } from './Guest'
+import type { Hotel } from './Hotel'
 import type { Purchase } from './Purchase'
 import type { Sale } from './Sale'
 
-export type TransactionAssociations = 'purchases' | 'sales' | 'from' | 'to'
+type AccountAssociations = 'purchases' | 'sales' | 'hotel' | 'guest' | 'agency'
 
-export class Transaction extends Model<
-  InferAttributes<Transaction, { omit: TransactionAssociations }>,
-  InferCreationAttributes<Transaction, { omit: TransactionAssociations }>
+export class Account extends Model<
+  InferAttributes<Account, {omit: AccountAssociations}>,
+  InferCreationAttributes<Account, {omit: AccountAssociations}>
 > {
   declare id: CreationOptional<number>
-  declare amount: number
-  declare remaining: number | null
-  declare paymentType: 'partial' | 'full' | null
+  declare credit: number | null
+  declare debit: number | null
+  declare type: 'guest' | 'hotel' | 'agency'
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
-  // Transaction hasMany Purchase
+  // Account hasMany Purchase
   declare purchases?: NonAttribute<Purchase[]>
   declare getPurchases: HasManyGetAssociationsMixin<Purchase>
   declare setPurchases: HasManySetAssociationsMixin<Purchase, number>
@@ -50,8 +52,8 @@ export class Transaction extends Model<
   declare hasPurchase: HasManyHasAssociationMixin<Purchase, number>
   declare hasPurchases: HasManyHasAssociationsMixin<Purchase, number>
   declare countPurchases: HasManyCountAssociationsMixin
-
-  // Transaction hasMany Sale
+  
+  // Account hasMany Sale
   declare sales?: NonAttribute<Sale[]>
   declare getSales: HasManyGetAssociationsMixin<Sale>
   declare setSales: HasManySetAssociationsMixin<Sale, number>
@@ -63,43 +65,50 @@ export class Transaction extends Model<
   declare hasSale: HasManyHasAssociationMixin<Sale, number>
   declare hasSales: HasManyHasAssociationsMixin<Sale, number>
   declare countSales: HasManyCountAssociationsMixin
-
-  // Transaction belongsTo Account (as From)
-  declare from?: NonAttribute<Account>
-  declare getFrom: BelongsToGetAssociationMixin<Account>
-  declare setFrom: BelongsToSetAssociationMixin<Account, number>
-  declare createFrom: BelongsToCreateAssociationMixin<Account>
-
-  // Transaction belongsTo Account (as To)
-  declare to?: NonAttribute<Account>
-  declare getTo: BelongsToGetAssociationMixin<Account>
-  declare setTo: BelongsToSetAssociationMixin<Account, number>
-  declare createTo: BelongsToCreateAssociationMixin<Account>
-
+  
+  // Account hasOne Hotel
+  declare hotel?: NonAttribute<Hotel>
+  declare getHotel: HasOneGetAssociationMixin<Hotel>
+  declare setHotel: HasOneSetAssociationMixin<Hotel, number>
+  declare createHotel: HasOneCreateAssociationMixin<Hotel>
+  
+  // Account hasOne Guest
+  declare guest?: NonAttribute<Guest>
+  declare getGuest: HasOneGetAssociationMixin<Guest>
+  declare setGuest: HasOneSetAssociationMixin<Guest, number>
+  declare createGuest: HasOneCreateAssociationMixin<Guest>
+  
+  // Account hasOne Agency
+  declare agency?: NonAttribute<Agency>
+  declare getAgency: HasOneGetAssociationMixin<Agency>
+  declare setAgency: HasOneSetAssociationMixin<Agency, number>
+  declare createAgency: HasOneCreateAssociationMixin<Agency>
+  
   declare static associations: {
-    purchases: Association<Transaction, Purchase>,
-    sales: Association<Transaction, Sale>,
-    from: Association<Transaction, Account>,
-    to: Association<Transaction, Account>
+    purchases: Association<Account, Purchase>,
+    sales: Association<Account, Sale>,
+    hotel: Association<Account, Hotel>,
+    guest: Association<Account, Guest>,
+    agency: Association<Account, Agency>
   }
 
-  static initModel(sequelize: Sequelize): typeof Transaction {
-    Transaction.init({
+  static initModel(sequelize: Sequelize): typeof Account {
+    Account.init({
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
         unique: true
       },
-      amount: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      remaining: {
+      credit: {
         type: DataTypes.INTEGER
       },
-      paymentType: {
-        type: DataTypes.ENUM('partial', 'full')
+      debit: {
+        type: DataTypes.INTEGER
+      },
+      type: {
+        type: DataTypes.ENUM('guest', 'hotel', 'agency'),
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE
@@ -110,7 +119,7 @@ export class Transaction extends Model<
     }, {
       sequelize
     })
-
-    return Transaction
+    
+    return Account
   }
 }

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import db from './../../models/db'
+import db from '../../models/db'
 @Injectable()
 export class SaleService {
      private db;

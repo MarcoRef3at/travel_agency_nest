@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Put, Delete, Param } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
-import { SaleDto } from './interfaces/sale.interface';
+// import { SaleDto } from './interfaces/sale.interface';
 import { SaleService } from './sale.service'
 
 @Controller('sale')
@@ -8,7 +8,7 @@ export class SaleController {
      constructor(private saleService: SaleService) { }
 
      @Post()
-     async createSale(@Body() body: SaleDto) {
+     async createSale(@Body() body) {
           return await this.saleService.createSale(body)
      }
 
@@ -23,7 +23,7 @@ export class SaleController {
      }
 
      @Put(':id')
-     async UpdateSale(@Param('id') id: string, @Body(new ValidationPipe()) body: SaleDto) {
+     async UpdateSale(@Param('id') id: string, @Body(new ValidationPipe()) body) {
           return await this.saleService.UpdateSale(id, body)
      }
 

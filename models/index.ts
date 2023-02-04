@@ -5,6 +5,7 @@ import { Sale } from './Sale'
 import { Hotel } from './Hotel'
 import { Guest } from './Guest'
 import { Agency } from './Agency'
+import { Account } from './Account'
 
 export {
   Purchase,
@@ -12,24 +13,22 @@ export {
   Sale,
   Hotel,
   Guest,
-  Agency
+  Agency,
+  Account
 }
 
 export function initModels(sequelize: Sequelize) {
-  Agency.initModel(sequelize)
+  Account.initModel(sequelize)
+  Purchase.initModel(sequelize)
+  Transaction.initModel(sequelize)
+  Sale.initModel(sequelize)
   Hotel.initModel(sequelize)
   Guest.initModel(sequelize)
-  Sale.initModel(sequelize)
-  Transaction.initModel(sequelize)
-  Purchase.initModel(sequelize)
+  Agency.initModel(sequelize)
 
-  Purchase.belongsTo(Hotel, {
-    as: 'hotel',
-    foreignKey: 'hotelId'
-  })
-  Purchase.belongsTo(Agency, {
-    as: 'agency',
-    foreignKey: 'agencyId'
+  Purchase.belongsTo(Account, {
+    as: 'account',
+    foreignKey: 'accountId'
   })
   Purchase.belongsTo(Transaction, {
     as: 'transaction',
@@ -43,57 +42,53 @@ export function initModels(sequelize: Sequelize) {
     as: 'sales',
     foreignKey: 'transactionId'
   })
-  Transaction.belongsTo(Hotel, {
-    as: 'fromHotel',
-    foreignKey: 'fromHotelId'
+  Transaction.belongsTo(Account, {
+    as: 'from',
+    foreignKey: 'fromId'
   })
-  Transaction.belongsTo(Agency, {
-    as: 'fromAgency',
-    foreignKey: 'fromAgencyId'
-  })
-  Transaction.belongsTo(Guest, {
-    as: 'fromGuest',
-    foreignKey: 'fromGuestId'
-  })
-  Transaction.belongsTo(Hotel, {
-    as: 'toHotel',
-    foreignKey: 'toHotelId'
-  })
-  Transaction.belongsTo(Agency, {
-    as: 'toAgency',
-    foreignKey: 'toAgencyId'
-  })
-  Transaction.belongsTo(Guest, {
-    as: 'toGuest',
-    foreignKey: 'toGuestId'
+  Transaction.belongsTo(Account, {
+    as: 'to',
+    foreignKey: 'toId'
   })
   Sale.belongsTo(Transaction, {
     as: 'transaction',
     foreignKey: 'transactionId'
   })
-  Sale.belongsTo(Agency, {
-    as: 'agency',
-    foreignKey: 'agencyId'
+  Sale.belongsTo(Account, {
+    as: 'account',
+    foreignKey: 'accountId'
   })
-  Sale.belongsTo(Guest, {
+  Hotel.belongsTo(Account, {
+    as: 'account',
+    foreignKey: 'accountId'
+  })
+  Guest.belongsTo(Account, {
+    as: 'account',
+    foreignKey: 'accountId'
+  })
+  Agency.belongsTo(Account, {
+    as: 'account',
+    foreignKey: 'accountId'
+  })
+  Account.hasMany(Purchase, {
+    as: 'purchases',
+    foreignKey: 'accountId'
+  })
+  Account.hasMany(Sale, {
+    as: 'sales',
+    foreignKey: 'accountId'
+  })
+  Account.hasOne(Hotel, {
+    as: 'hotel',
+    foreignKey: 'accountId'
+  })
+  Account.hasOne(Guest, {
     as: 'guest',
-    foreignKey: 'guestId'
+    foreignKey: 'accountId'
   })
-  Hotel.hasMany(Purchase, {
-    as: 'purchases',
-    foreignKey: 'hotelId'
-  })
-  Guest.hasMany(Sale, {
-    as: 'sales',
-    foreignKey: 'guestId'
-  })
-  Agency.hasMany(Purchase, {
-    as: 'purchases',
-    foreignKey: 'agencyId'
-  })
-  Agency.hasMany(Sale, {
-    as: 'sales',
-    foreignKey: 'agencyId'
+  Account.hasOne(Agency, {
+    as: 'agency',
+    foreignKey: 'accountId'
   })
 
   return {
@@ -102,6 +97,7 @@ export function initModels(sequelize: Sequelize) {
     Sale,
     Hotel,
     Guest,
-    Agency
+    Agency,
+    Account
   }
 }
