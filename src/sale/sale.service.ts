@@ -9,7 +9,8 @@ export class SaleService {
 
      async createSale(data) {
           try {
-               return await this.db.Sale.create(data)
+            // TODO: prevent creating purchase if account id = 1 (current user's account)
+            return await this.db.Sale.create(data);
           } catch (error) {
                console.log('createSale error:', error)
                throw new BadRequestException('Something wrong happened', { description: error.message })
@@ -18,7 +19,29 @@ export class SaleService {
 
      async getAllSales() {
           try {
-               return await this.db.Sale.findAll()
+               return await this.db.Sale.findAll({
+                 attributes: {
+                   exclude: ['accountId', 'updatedAt'],
+                 },
+                 include: [
+                   {
+                     model: this.db.Account,
+                     as: 'account',
+                     include: [
+                       {
+                         model: this.db.Guest,
+                         as: 'guest',
+                         attributes: ['id', 'name'],
+                       },
+                       {
+                         model: this.db.Agency,
+                         as: 'agency',
+                         attributes: ['id', 'name'],
+                       },
+                     ],
+                   },
+                 ],
+               });
           } catch (error) {
                console.log('getAllSales error:', error)
                throw new BadRequestException('Something wrong happened', { description: error.message })
@@ -27,7 +50,29 @@ export class SaleService {
 
      async getOneSale(id: string) {
           try {
-               return await this.db.Sale.findByPk(id)
+               return await this.db.Sale.findByPk(id, {
+                 attributes: {
+                   exclude: ['accountId', 'updatedAt'],
+                 },
+                 include: [
+                   {
+                     model: this.db.Account,
+                     as: 'account',
+                     include: [
+                       {
+                         model: this.db.Guest,
+                         as: 'guest',
+                         attributes: ['id', 'name'],
+                       },
+                       {
+                         model: this.db.Agency,
+                         as: 'agency',
+                         attributes: ['id', 'name'],
+                       },
+                     ],
+                   },
+                 ],
+               });
           } catch (error) {
                console.log('getOneSale error:', error)
                throw new BadRequestException('Something wrong happened', { description: error.message })
