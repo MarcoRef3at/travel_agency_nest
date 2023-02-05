@@ -11,10 +11,10 @@ const sequelize: Sequelize = new Sequelize({
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '3306'),
   define: {
-    underscored: true
+    underscored: false,
   },
-  logging: true
-})
+  logging: false,
+});
 
 let db = {
   sequelize: sequelize,
