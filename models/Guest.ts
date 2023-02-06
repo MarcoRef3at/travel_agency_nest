@@ -11,9 +11,9 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
-import type { Account } from './Account'
+import { Account } from './Account';
 
-type GuestAssociations = 'account'
+type GuestAssociations = 'account';
 
 export class Guest extends Model<
   InferAttributes<Guest, { omit: GuestAssociations }>,
@@ -21,6 +21,7 @@ export class Guest extends Model<
 > {
   declare id: CreationOptional<number>;
   declare name: string;
+  declare accountId: number;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -48,6 +49,13 @@ export class Guest extends Model<
           type: DataTypes.STRING,
           allowNull: false,
         },
+        accountId: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'accounts',
+            key: 'id',
+          },
+        },
         createdAt: {
           type: DataTypes.DATE,
         },
@@ -59,6 +67,30 @@ export class Guest extends Model<
         sequelize,
       },
     );
+
+    Guest.beforeCreate(async (guest) => {
+      let account = await Account.create({
+        name: guest.name,
+        type: 'guest',
+        credit: 0,
+        debit: 0,
+      });
+      guest.accountId = account.id;
+    });
+
+    // TODO: not working try to check it again
+    Guest.beforeUpdate(async (guest) => {
+      console.log('1');
+      console.log('guest.changed(name):', guest.changed('name'));
+      // Check if the name field is being updated
+      if (guest.changed('name')) {
+        // If so, update the related account record
+        await Account.update(
+          { name: guest.name },
+          { where: { id: guest.accountId } },
+        );
+      }
+    });
 
     return Guest;
   }

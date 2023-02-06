@@ -11,9 +11,9 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
-import type { Account } from './Account'
+import { Account } from './Account';
 
-type HotelAssociations = 'account'
+type HotelAssociations = 'account';
 
 export class Hotel extends Model<
   InferAttributes<Hotel, { omit: HotelAssociations }>,
@@ -21,6 +21,7 @@ export class Hotel extends Model<
 > {
   declare id: CreationOptional<number>;
   declare name: string;
+  declare accountId: number;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -48,6 +49,13 @@ export class Hotel extends Model<
           type: DataTypes.STRING,
           allowNull: false,
         },
+        accountId: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'accounts',
+            key: 'id',
+          },
+        },
         createdAt: {
           type: DataTypes.DATE,
         },
@@ -60,6 +68,29 @@ export class Hotel extends Model<
       },
     );
 
+    Hotel.beforeCreate(async (hotel) => {
+      let account = await Account.create({
+        name: hotel.name,
+        type: 'hotel',
+        credit: 0,
+        debit: 0,
+      });
+      hotel.accountId = account.id;
+    });
+
+    // TODO
+    // Hotel.beforeUpdate(async (hotel) => {
+    //   console.log('1');
+    //   console.log('hotel.changed(name):', hotel.changed('name'));
+    //   // Check if the name field is being updated
+    //   if (hotel.changed('name')) {
+    //     // If so, update the related account record
+    //     await Account.update(
+    //       { name: hotel.name },
+    //       { where: { id: hotel.accountId } },
+    //     );
+    //   }
+    // });
     return Hotel;
   }
 }

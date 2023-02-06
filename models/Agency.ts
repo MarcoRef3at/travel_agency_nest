@@ -9,11 +9,11 @@ import {
   InferAttributes,
   Model,
   NonAttribute,
-  Sequelize
-} from 'sequelize'
-import type { Account } from './Account'
+  Sequelize,
+} from 'sequelize';
+import { Account } from './Account';
 
-type AgencyAssociations = 'account'
+type AgencyAssociations = 'account';
 
 export class Agency extends Model<
   InferAttributes<Agency, { omit: AgencyAssociations }>,
@@ -21,6 +21,7 @@ export class Agency extends Model<
 > {
   declare id: CreationOptional<number>;
   declare name: string;
+  declare accountId: number;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -47,6 +48,13 @@ export class Agency extends Model<
           type: DataTypes.STRING,
           allowNull: false,
         },
+        accountId: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'accounts',
+            key: 'id',
+          },
+        },
         createdAt: {
           type: DataTypes.DATE,
         },
@@ -58,6 +66,30 @@ export class Agency extends Model<
         sequelize,
       },
     );
+
+    Agency.beforeCreate(async (agency) => {
+      let account = await Account.create({
+        name: agency.name,
+        type: 'agency',
+        credit: 0,
+        debit: 0,
+      });
+      agency.accountId = account.id;
+    });
+
+    // TODO
+    // Hotel.beforeUpdate(async (hotel) => {
+    //   console.log('1');
+    //   console.log('hotel.changed(name):', hotel.changed('name'));
+    //   // Check if the name field is being updated
+    //   if (hotel.changed('name')) {
+    //     // If so, update the related account record
+    //     await Account.update(
+    //       { name: hotel.name },
+    //       { where: { id: hotel.accountId } },
+    //     );
+    //   }
+    // });
 
     return Agency;
   }
