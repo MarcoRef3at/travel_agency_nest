@@ -37,6 +37,7 @@ export class Transaction extends Model<
   declare toId: number;
   declare remaining: number | null;
   declare paymentType: 'partial' | 'full' | null;
+  declare status: 'due' | 'paid';
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -120,6 +121,10 @@ export class Transaction extends Model<
         },
         paymentType: {
           type: DataTypes.ENUM('partial', 'full'),
+        },
+        status: {
+          type: DataTypes.ENUM('due', 'paid'),
+          defaultValue: 'paid',
         },
         createdAt: {
           type: DataTypes.DATE,

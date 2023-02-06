@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import db from '../../models/db'
+import { Transaction } from 'models';
+import db from '../../models/db';
 import { PurchaseInterface } from './interfaces/purchase.interface';
 @Injectable()
 export class PurchaseService {
@@ -9,7 +10,16 @@ export class PurchaseService {
   }
   async createPurchase(data: PurchaseInterface) {
     // TODO: prevent creating purchase if account id = 1 (current user's account)
+    // TODO Prevent creating purchase if account type is guest
     try {
+      let transaction = await Transaction.create({
+        amount: data.amount,
+        status: 'due',
+        fromId: 1,
+        toId: data.account_id,
+      });
+
+      data.transaction_id = transaction.id;
       return await this.db.Purchase.create(data);
     } catch (error) {
       console.log('createPurchase error:', error);
